@@ -1,0 +1,670 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Minji Kim</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --sand: #f5f0e8;
+      --sand-dark: #ede5d5;
+      --clay: #c8a882;
+      --clay-dark: #a07850;
+      --bark: #5c3d2e;
+      --bark-light: #8b5e3c;
+      --cream: #faf7f2;
+      --stone: #8a7968;
+      --stone-light: #b8aa98;
+      --text-main: #2c1f14;
+      --text-soft: #6b5a47;
+      --text-muted: #9a8878;
+      --nav-h: 70px;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Calibri', sans-serif;
+      background: var(--cream);
+      color: var(--text-main);
+      font-size: 16px;
+      line-height: 1.7;
+    }
+
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      height: var(--nav-h);
+      background: rgba(250, 247, 242, 0.92);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid rgba(200, 168, 130, 0.25);
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 5vw;
+    }
+
+    .nav-logo {
+      font-family: 'Calibri', sans-serif;
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: var(--bark);
+      text-decoration: none;
+    }
+
+    .nav-links { display: flex; gap: 2.5rem; list-style: none; }
+
+    .nav-links a {
+      text-decoration: none;
+      font-size: 0.85rem;
+      font-weight: 400;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--text-soft);
+      transition: color 0.2s;
+      padding-bottom: 2px;
+      border-bottom: 1.5px solid transparent;
+    }
+
+    .nav-links a:hover, .nav-links a.active {
+      color: var(--bark);
+      border-bottom-color: var(--clay);
+    }
+
+    #home {
+      min-height: 100vh;
+      padding-top: var(--nav-h);
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      align-items: center;
+      gap: 4rem;
+      max-width: 1100px;
+      margin: 0 auto;
+      padding-left: 5vw;
+      padding-right: 5vw;
+    }
+
+    .hero-text h1 {
+      font-family: 'Calibri', sans-serif;
+      font-size: clamp(2.4rem, 5vw, 3.8rem);
+      font-weight: 700;
+      line-height: 1.1;
+      color: var(--bark);
+      margin-bottom: 0.4rem;
+    }
+
+    .hero-text h1 em { font-style: italic; color: var(--clay-dark); }
+
+    .hero-tagline { font-size: 1rem; color: var(--stone); margin-bottom: 1.6rem; letter-spacing: 0.04em; }
+
+    .hero-desc { font-size: 1.05rem; color: var(--text-soft); max-width: 480px; margin-bottom: 2rem; line-height: 1.8; }
+
+    .pill-row { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 2.2rem; }
+
+    .pill {
+      padding: 0.3rem 0.9rem;
+      border-radius: 999px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      background: var(--sand-dark);
+      color: var(--bark-light);
+      border: 1px solid rgba(160, 120, 80, 0.25);
+    }
+
+    .btn-row { display: flex; gap: 1rem; flex-wrap: wrap; }
+
+    .btn {
+      padding: 0.7rem 1.6rem;
+      border-radius: 6px;
+      font-family: 'Calibri', sans-serif;
+      font-size: 0.95rem;
+      font-weight: 600;
+      text-decoration: none;
+      cursor: pointer;
+      transition: all 0.2s;
+      letter-spacing: 0.04em;
+      border: none;
+    }
+
+    .btn-primary { background: var(--bark); color: var(--cream); }
+    .btn-primary:hover { background: var(--bark-light); }
+    .btn-outline { background: transparent; color: var(--bark); border: 1.5px solid var(--clay); }
+    .btn-outline:hover { background: var(--sand-dark); }
+
+    .hero-img-wrap { display: flex; justify-content: center; align-items: center; }
+
+    .hero-photo {
+      width: 340px;
+      height: 400px;
+      border-radius: 18px 60px 18px 60px;
+      object-fit: cover;
+      border: 2px solid rgba(200, 168, 130, 0.3);
+    }
+
+    section { padding: 6rem 5vw; max-width: 1100px; margin: 0 auto; }
+
+    .section-label {
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--clay-dark);
+      margin-bottom: 0.6rem;
+    }
+
+    .section-title {
+      font-family: 'Calibri', sans-serif;
+      font-size: clamp(1.8rem, 3.5vw, 2.6rem);
+      font-weight: 700;
+      color: var(--bark);
+      margin-bottom: 2.5rem;
+      line-height: 1.2;
+    }
+
+    .divider { width: 50px; height: 2px; background: var(--clay); margin-bottom: 2.5rem; }
+
+    .about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; align-items: start; }
+
+    .about-text p { color: var(--text-soft); margin-bottom: 1.2rem; font-size: 1.02rem; }
+
+    .about-cards { display: flex; flex-direction: column; gap: 1.2rem; }
+
+    .about-card { background: var(--sand); border-radius: 12px; padding: 1.4rem 1.6rem; border: 1px solid rgba(200, 168, 130, 0.3); }
+    .about-card-icon { font-size: 1.3rem; margin-bottom: 0.5rem; }
+    .about-card-title { font-weight: 700; color: var(--bark); font-size: 0.95rem; margin-bottom: 0.3rem; }
+    .about-card-text { font-size: 0.88rem; color: var(--text-soft); }
+
+    .pub-list { display: flex; flex-direction: column; gap: 1.8rem; }
+
+    .pub-item {
+      background: var(--cream);
+      border-radius: 12px;
+      padding: 1.8rem 2rem;
+      border: 1px solid rgba(200, 168, 130, 0.25);
+      transition: box-shadow 0.2s, transform 0.2s;
+    }
+
+    .pub-item:hover { box-shadow: 0 8px 32px rgba(92, 61, 46, 0.08); transform: translateY(-2px); }
+
+    .pub-tag {
+      display: inline-block;
+      font-size: 0.72rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;
+      padding: 0.2rem 0.7rem; border-radius: 999px;
+      background: var(--sand-dark); color: var(--bark-light); margin-bottom: 0.75rem;
+    }
+
+    .pub-title { font-family: 'Calibri', sans-serif; font-size: 1.05rem; font-weight: 700; color: var(--bark); margin-bottom: 0.5rem; line-height: 1.4; }
+    .pub-meta { font-size: 0.85rem; color: var(--stone); margin-bottom: 0.5rem; }
+    .pub-desc { font-size: 0.92rem; color: var(--text-soft); }
+
+    .research-areas { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.2rem; margin-bottom: 3rem; }
+
+    .area-card { background: var(--cream); border-radius: 12px; padding: 1.5rem; border: 1px solid rgba(200, 168, 130, 0.25); text-align: center; }
+    .area-icon { font-size: 1.8rem; margin-bottom: 0.6rem; }
+    .area-title { font-weight: 700; color: var(--bark); font-size: 0.95rem; }
+
+    .cv-section { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; }
+
+    .cv-block h3 {
+      font-family: 'Calibri', sans-serif; font-size: 1.2rem; font-weight: 700; color: var(--bark);
+      margin-bottom: 1.5rem; padding-bottom: 0.6rem; border-bottom: 1.5px solid rgba(200,168,130,0.4);
+    }
+
+    .cv-entry { margin-bottom: 1.5rem; padding-left: 1rem; border-left: 2px solid var(--clay); }
+    .cv-entry-title { font-weight: 700; color: var(--text-main); font-size: 0.95rem; }
+    .cv-entry-sub { font-size: 0.88rem; color: var(--stone); margin-top: 0.2rem; }
+    .cv-entry-date { font-size: 0.8rem; color: var(--text-muted); margin-top: 0.15rem; }
+
+    .cafe-hero {
+      background: var(--sand); border-radius: 16px; padding: 2rem 2.4rem; margin-bottom: 3rem;
+      display: flex; align-items: center; gap: 2rem; border: 1px solid rgba(200,168,130,0.3);
+    }
+    .cafe-hero-icon { font-size: 3rem; }
+    .cafe-hero h3 { font-family: 'Calibri', sans-serif; font-size: 1.4rem; font-weight: 700; color: var(--bark); margin-bottom: 0.3rem; }
+    .cafe-hero p { font-size: 0.92rem; color: var(--text-soft); }
+
+    .cafe-tabs { display: flex; gap: 1rem; margin-bottom: 2.5rem; }
+    .cafe-tab {
+      padding: 0.55rem 1.4rem; border-radius: 999px; font-size: 0.85rem; font-weight: 600;
+      cursor: pointer; border: 1.5px solid var(--clay); background: transparent; color: var(--bark);
+      font-family: 'Calibri', sans-serif; transition: all 0.2s;
+    }
+    .cafe-tab.active, .cafe-tab:hover { background: var(--bark); color: var(--cream); border-color: var(--bark); }
+
+    .cafe-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1.5rem; margin-bottom: 3rem; }
+
+    .cafe-card { background: var(--cream); border-radius: 16px; overflow: hidden; border: 1px solid rgba(200,168,130,0.25); transition: transform 0.2s, box-shadow 0.2s; }
+    .cafe-card:hover { transform: translateY(-3px); box-shadow: 0 12px 36px rgba(92,61,46,0.1); }
+
+    .cafe-img { width: 100%; height: 180px; background: var(--sand-dark); display: flex; align-items: center; justify-content: center; font-size: 3rem; }
+    .cafe-body { padding: 1.3rem 1.5rem; }
+    .cafe-name { font-family: 'Calibri', sans-serif; font-size: 1.1rem; font-weight: 700; color: var(--bark); margin-bottom: 0.25rem; }
+    .cafe-loc { font-size: 0.82rem; color: var(--text-muted); margin-bottom: 0.6rem; }
+    .stars { color: #c8a050; font-size: 1rem; letter-spacing: 0.05em; margin-bottom: 0.6rem; }
+    .star-empty { color: var(--stone-light); }
+    .cafe-review { font-size: 0.88rem; color: var(--text-soft); line-height: 1.5; font-style: italic; }
+    .cafe-tags { display: flex; gap: 0.4rem; flex-wrap: wrap; margin-top: 0.8rem; }
+    .cafe-tag { font-size: 0.73rem; padding: 0.15rem 0.6rem; border-radius: 999px; background: var(--sand); color: var(--bark-light); border: 1px solid rgba(160,120,80,0.2); }
+
+    .suggest-wrap { background: var(--sand); border-radius: 16px; padding: 2.5rem; border: 1px solid rgba(200,168,130,0.3); }
+    .suggest-wrap h3 { font-family: 'Calibri', sans-serif; font-size: 1.3rem; font-weight: 700; color: var(--bark); margin-bottom: 0.4rem; }
+    .suggest-wrap p { font-size: 0.9rem; color: var(--text-soft); margin-bottom: 1.6rem; }
+
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    .form-field { display: flex; flex-direction: column; gap: 0.4rem; }
+    .form-field.full { grid-column: 1 / -1; }
+    .form-field label { font-size: 0.82rem; font-weight: 700; color: var(--text-soft); letter-spacing: 0.04em; }
+
+    .form-field input, .form-field textarea {
+      padding: 0.65rem 1rem; border-radius: 8px; border: 1.5px solid rgba(200,168,130,0.4);
+      background: var(--cream); font-family: 'Calibri', sans-serif; font-size: 0.9rem;
+      color: var(--text-main); transition: border-color 0.2s; outline: none;
+    }
+    .form-field input:focus, .form-field textarea:focus { border-color: var(--clay-dark); }
+    .form-field textarea { resize: vertical; min-height: 90px; }
+
+    .star-picker { display: flex; gap: 0.5rem; margin-top: 0.2rem; }
+    .star-btn { font-size: 1.4rem; cursor: pointer; background: none; border: none; color: var(--stone-light); transition: color 0.15s; padding: 0; }
+    .star-btn.lit { color: #c8a050; }
+
+    .submit-row { margin-top: 1.4rem; display: flex; justify-content: flex-end; }
+
+    .success-banner {
+      display: none; background: #e8f5e0; border: 1px solid #9bc87a; border-radius: 8px;
+      padding: 0.9rem 1.2rem; font-size: 0.9rem; color: #3a6e1e; margin-top: 1rem;
+    }
+
+    .contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; align-items: start; }
+    .contact-info p { font-size: 1rem; color: var(--text-soft); margin-bottom: 1.8rem; line-height: 1.8; }
+
+    .contact-links { display: flex; flex-direction: column; gap: 0.9rem; }
+    .contact-link {
+      display: flex; align-items: center; gap: 0.9rem; text-decoration: none;
+      color: var(--text-soft); font-size: 0.92rem; transition: color 0.2s;
+      padding: 0.6rem 0; border-bottom: 1px solid rgba(200,168,130,0.2);
+    }
+    .contact-link:hover { color: var(--bark); }
+    .contact-link-icon { width: 36px; height: 36px; border-radius: 8px; background: var(--sand-dark); display: flex; align-items: center; justify-content: center; font-size: 1rem; flex-shrink: 0; }
+
+    .contact-form { background: var(--sand); border-radius: 16px; padding: 2.5rem; border: 1px solid rgba(200,168,130,0.3); }
+    .contact-form h3 { font-family: 'Calibri', sans-serif; font-size: 1.2rem; font-weight: 700; color: var(--bark); margin-bottom: 1.5rem; }
+
+    footer { text-align: center; padding: 3rem 5vw; border-top: 1px solid rgba(200,168,130,0.25); font-size: 0.85rem; color: var(--text-muted); }
+    footer strong { color: var(--bark-light); }
+
+    @media (max-width: 768px) {
+      #home { grid-template-columns: 1fr; text-align: center; padding-top: calc(var(--nav-h) + 2rem); min-height: auto; padding-bottom: 4rem; }
+      .hero-img-wrap { order: -1; }
+      .hero-photo { width: 200px; height: 240px; }
+      .hero-desc { margin: 0 auto 2rem; }
+      .pill-row, .btn-row { justify-content: center; }
+      .about-grid, .cv-section, .contact-grid { grid-template-columns: 1fr; gap: 2.5rem; }
+      .form-grid { grid-template-columns: 1fr; }
+      nav { padding: 0 4vw; }
+      .nav-links { gap: 1.2rem; }
+      .nav-links a { font-size: 0.75rem; }
+    }
+
+    .reveal { opacity: 0; transform: translateY(24px); transition: opacity 0.6s ease, transform 0.6s ease; }
+    .reveal.visible { opacity: 1; transform: none; }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="#home" class="nav-logo">Minji Kim</a>
+  <ul class="nav-links">
+    <li><a href="#home" class="active">Home</a></li>
+    <li><a href="#about">About</a></li>
+    <li><a href="#research">Research</a></li>
+    <li><a href="#cv">CV</a></li>
+    <li><a href="#cafes">Cafés</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
+
+<section id="home">
+  <div class="hero-text">
+    <p class="section-label">Portfolio</p>
+    <h1>Minji<br><em>Kim</em></h1>
+    <p class="hero-tagline">Human-Centered Data Science · Business Analytics · AI Systems</p>
+    <p class="hero-desc">
+      MS candidate in Business Analytics at UT Austin McCombs · alumna of Human-Centered Data Science at UT Austin · currently an AI Systems &amp; Data Automations Fellow at VIPC in Virginia.
+    </p>
+    <div class="pill-row">
+      <span class="pill">Data Science</span>
+      <span class="pill">AI Automation</span>
+      <span class="pill">Business Analytics</span>
+      <span class="pill">Human-Centered Design</span>
+    </div>
+    <div class="btn-row">
+      <a href="#research" class="btn btn-primary">View My Work</a>
+      <a href="#contact" class="btn btn-outline">Get in Touch</a>
+    </div>
+  </div>
+  <div class="hero-img-wrap">
+    <img class="hero-photo" src="photo/Minji Headshot.png" alt="Minji Kim" />
+  </div>
+</section>
+
+<section id="about">
+  <p class="section-label reveal">About Me</p>
+  <h2 class="section-title reveal">Where data meets<br><em>people &amp; purpose</em></h2>
+  <div class="divider reveal"></div>
+  <div class="about-grid">
+    <div class="about-text reveal">
+      <p>Hi! I'm Minji — a data scientist and AI fellow with a passion for building systems that are as intelligent as they are human-centered. I completed my undergraduate studies in Human-Centered Data Science at the University of Texas at Austin, where I developed a foundation in research design, data analysis, and user-focused thinking.</p>
+      <p>I'm currently pursuing an MS in Business Analytics at UT Austin's McCombs School of Business, while working as an AI Systems &amp; Data Automations Fellow at the Virginia Innovation Partnership Corporation (VIPC) — where I help organizations harness AI to streamline workflows and unlock insights.</p>
+      <p>My work sits at the intersection of analytics, automation, and human experience. I'm drawn to questions about how AI can be designed and deployed responsibly — and how data storytelling can drive real decisions.</p>
+    </div>
+    <div class="about-cards reveal">
+      <div class="about-card">
+        <div class="about-card-icon">🎓</div>
+        <div class="about-card-title">Education</div>
+        <div class="about-card-text">MS Business Analytics (in progress) · BS Human-Centered Data Science — University of Texas at Austin</div>
+      </div>
+      <div class="about-card">
+        <div class="about-card-icon">💼</div>
+        <div class="about-card-title">Current Role</div>
+        <div class="about-card-text">AI Systems &amp; Data Automations Fellow at Virginia Innovation Partnership Corporation (VIPC), Dale City, VA</div>
+      </div>
+      <div class="about-card">
+        <div class="about-card-icon">🔍</div>
+        <div class="about-card-title">Interests</div>
+        <div class="about-card-text">Responsible AI · data automation · analytics storytelling · human-computer interaction · good coffee</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div style="background: var(--sand); padding: 6rem 5vw; margin: 0;">
+  <div id="research" style="max-width:1100px; margin:0 auto;">
+    <p class="section-label reveal">Research &amp; Work</p>
+    <h2 class="section-title reveal">Projects &amp; Publications</h2>
+    <div class="divider reveal"></div>
+    <div class="research-areas reveal">
+      <div class="area-card"><div class="area-icon">🤖</div><div class="area-title">AI Systems &amp; Automation</div></div>
+      <div class="area-card"><div class="area-icon">📊</div><div class="area-title">Business Analytics</div></div>
+      <div class="area-card"><div class="area-icon">🧑‍💻</div><div class="area-title">Human-Centered Design</div></div>
+      <div class="area-card"><div class="area-icon">🌐</div><div class="area-title">Data Storytelling</div></div>
+    </div>
+    <div class="pub-list">
+      <div class="pub-item reveal">
+        <span class="pub-tag">Project</span>
+        <div class="pub-title">AI-Powered Workflow Automation at VIPC</div>
+        <div class="pub-meta">Virginia Innovation Partnership Corporation · 2024–Present</div>
+        <div class="pub-desc">Designing and deploying AI-driven data automation pipelines to support innovation programs and reduce manual overhead for Virginia's startup ecosystem.</div>
+      </div>
+      <div class="pub-item reveal">
+        <span class="pub-tag">Research</span>
+        <div class="pub-title">Human-Centered Approaches to Data Science Education</div>
+        <div class="pub-meta">UT Austin · School of Information · 2023</div>
+        <div class="pub-desc">Investigated how inclusive, participatory design frameworks can be integrated into data science curricula to produce more equitable and human-centered practitioners.</div>
+      </div>
+      <div class="pub-item reveal">
+        <span class="pub-tag">Capstone</span>
+        <div class="pub-title">Predictive Analytics for [Your Capstone Topic]</div>
+        <div class="pub-meta">UT Austin McCombs · MS Business Analytics</div>
+        <div class="pub-desc">Replace this with your actual MS capstone or thesis project description. Add the methods, dataset, and outcomes.</div>
+      </div>
+    </div>
+    <div style="margin-top:2rem;" class="reveal">
+      <a href="#cv" class="btn btn-outline">View Full CV →</a>
+    </div>
+  </div>
+</div>
+
+<section id="cv">
+  <p class="section-label reveal">Curriculum Vitae</p>
+  <h2 class="section-title reveal">Experience &amp; Education</h2>
+  <div class="divider reveal"></div>
+  <div class="cv-section reveal">
+    <div class="cv-block">
+      <h3>Education</h3>
+      <div class="cv-entry">
+        <div class="cv-entry-title">MS Business Analytics (in progress)</div>
+        <div class="cv-entry-sub">McCombs School of Business, University of Texas at Austin</div>
+        <div class="cv-entry-date">2024 – Present</div>
+      </div>
+      <div class="cv-entry">
+        <div class="cv-entry-title">BS Human-Centered Data Science</div>
+        <div class="cv-entry-sub">University of Texas at Austin · School of Information</div>
+        <div class="cv-entry-date">20XX – 20XX</div>
+      </div>
+      <h3 style="margin-top:2.5rem;">Skills</h3>
+      <div class="cv-entry">
+        <div class="cv-entry-title">Languages &amp; Tools</div>
+        <div class="cv-entry-sub">Python · SQL · R · Tableau · Power BI · Excel</div>
+      </div>
+      <div class="cv-entry">
+        <div class="cv-entry-title">Methods</div>
+        <div class="cv-entry-sub">Machine Learning · NLP · Data Visualization · Workflow Automation · UX Research</div>
+      </div>
+    </div>
+    <div class="cv-block">
+      <h3>Experience</h3>
+      <div class="cv-entry">
+        <div class="cv-entry-title">AI Systems &amp; Data Automations Fellow</div>
+        <div class="cv-entry-sub">Virginia Innovation Partnership Corporation (VIPC)</div>
+        <div class="cv-entry-date">2024 – Present · Dale City, VA</div>
+      </div>
+      <div class="cv-entry">
+        <div class="cv-entry-title">[Previous Role / Internship]</div>
+        <div class="cv-entry-sub">Company / Organization · Location</div>
+        <div class="cv-entry-date">20XX – 20XX</div>
+      </div>
+      <div class="cv-entry">
+        <div class="cv-entry-title">[Research Assistant / TA / Project]</div>
+        <div class="cv-entry-sub">UT Austin · Department</div>
+        <div class="cv-entry-date">20XX – 20XX</div>
+      </div>
+      <div style="margin-top:2.5rem;">
+        <a href="#" class="btn btn-primary" style="display:inline-block;">Download Full CV (PDF)</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="cafes">
+  <p class="section-label reveal">Café Diary</p>
+  <h2 class="section-title reveal">My Favorite Spots</h2>
+  <div class="divider reveal"></div>
+  <div class="cafe-hero reveal">
+    <div class="cafe-hero-icon">☕</div>
+    <div>
+      <h3>Minji's Café Guide</h3>
+      <p>A living, curated list of coffee shops, study spots, and hidden gems I've discovered in Austin, the DMV area, and beyond. Ratings are personal — expect strong opinions and honest reviews. Have a suggestion? Submit it below!</p>
+    </div>
+  </div>
+  <div class="cafe-tabs reveal">
+    <button class="cafe-tab active" onclick="filterCafe('all', this)">All</button>
+    <button class="cafe-tab" onclick="filterCafe('austin', this)">Austin, TX</button>
+    <button class="cafe-tab" onclick="filterCafe('virginia', this)">Virginia / DMV</button>
+    <button class="cafe-tab" onclick="filterCafe('other', this)">Other</button>
+  </div>
+  <div class="cafe-grid" id="cafe-grid"></div>
+  <div class="suggest-wrap reveal">
+    <h3>Suggest a Café ✉️</h3>
+    <p>Know a spot I should try? Fill in the form and I'll check it out!</p>
+    <div class="form-grid">
+      <div class="form-field">
+        <label>Café Name</label>
+        <input type="text" id="sug-name" placeholder="e.g. Houndstooth Coffee" />
+      </div>
+      <div class="form-field">
+        <label>City / Location</label>
+        <input type="text" id="sug-loc" placeholder="e.g. Austin, TX" />
+      </div>
+      <div class="form-field full">
+        <label>Why should I go?</label>
+        <textarea id="sug-note" placeholder="What makes it special?"></textarea>
+      </div>
+      <div class="form-field">
+        <label>Your Name (optional)</label>
+        <input type="text" id="sug-user" placeholder="e.g. Sarah" />
+      </div>
+      <div class="form-field">
+        <label>Your Rating Guess</label>
+        <div class="star-picker" id="sug-stars">
+          <button class="star-btn" data-v="1" onclick="setSugStar(1)">★</button>
+          <button class="star-btn" data-v="2" onclick="setSugStar(2)">★</button>
+          <button class="star-btn" data-v="3" onclick="setSugStar(3)">★</button>
+          <button class="star-btn" data-v="4" onclick="setSugStar(4)">★</button>
+          <button class="star-btn" data-v="5" onclick="setSugStar(5)">★</button>
+        </div>
+      </div>
+    </div>
+    <div class="submit-row">
+      <button class="btn btn-primary" onclick="submitSuggest()">Send Suggestion →</button>
+    </div>
+    <div class="success-banner" id="sug-success">Thanks for the suggestion! I'll check it out soon ☕</div>
+  </div>
+</section>
+
+<div style="background:var(--sand); padding: 6rem 5vw; margin:0;">
+  <div style="max-width:1100px; margin:0 auto;">
+    <section id="contact" style="padding:0; max-width:none;">
+      <p class="section-label reveal">Get in Touch</p>
+      <h2 class="section-title reveal">Let's Connect</h2>
+      <div class="divider reveal"></div>
+      <div class="contact-grid">
+        <div class="contact-info reveal">
+          <p>Whether you're interested in collaborating on research, talking data and AI, or just want to swap café recommendations — I'd love to hear from you!</p>
+          <div class="contact-links">
+            <a href="mailto:placeholder@utexas.edu" class="contact-link">
+              <div class="contact-link-icon">📧</div><span>placeholder@utexas.edu</span>
+            </a>
+            <a href="https://linkedin.com" target="_blank" class="contact-link">
+              <div class="contact-link-icon">💼</div><span>LinkedIn</span>
+            </a>
+            <a href="https://github.com" target="_blank" class="contact-link">
+              <div class="contact-link-icon">🐱</div><span>GitHub</span>
+            </a>
+            <a href="https://scholar.google.com" target="_blank" class="contact-link">
+              <div class="contact-link-icon">📚</div><span>Google Scholar</span>
+            </a>
+          </div>
+        </div>
+        <div class="contact-form reveal">
+          <h3>Send a Message</h3>
+          <div class="form-grid" style="grid-template-columns:1fr;">
+            <div class="form-field">
+              <label>Your Name</label>
+              <input type="text" id="c-name" placeholder="Jane Smith" />
+            </div>
+            <div class="form-field">
+              <label>Email</label>
+              <input type="email" id="c-email" placeholder="jane@example.com" />
+            </div>
+            <div class="form-field">
+              <label>Message</label>
+              <textarea id="c-msg" placeholder="Hi Minji! I wanted to reach out about..."></textarea>
+            </div>
+          </div>
+          <div class="submit-row">
+            <button class="btn btn-primary" onclick="submitContact()">Send Message →</button>
+          </div>
+          <div class="success-banner" id="c-success">Message sent! I'll get back to you soon 🌿</div>
+        </div>
+      </div>
+    </section>
+  </div>
+</div>
+
+<footer>
+  <p>© 2025 <strong>Minji Kim</strong> · Built with care · Austin, TX &amp; Dale City, VA</p>
+</footer>
+
+<script>
+  const cafes = [
+    { name: "Houndstooth Coffee", loc: "Austin, TX", area: "austin", stars: 5, review: "The gold standard of Austin coffee. Impeccable espresso and a lively, bookish atmosphere — my go-to study spot on North Lamar.", tags: ["Espresso", "Study-friendly", "Lively"], emoji: "☕" },
+    { name: "Epoch Coffee", loc: "Austin, TX", area: "austin", stars: 4, review: "Open 24 hours, which says everything. Reliably good cold brew and a chaotic, comforting energy that gets me through late-night homework sessions.", tags: ["24hrs", "Cold Brew", "Chill vibes"], emoji: "🌙" },
+    { name: "The Source Coffee", loc: "Woodbridge, VA", area: "virginia", stars: 5, review: "A rare gem in the DMV — specialty roasts, knowledgeable baristas, and a calm space that feels like a reward for surviving the commute.", tags: ["Specialty", "Quiet", "Cozy"], emoji: "🌿" },
+    { name: "Caffe Vita", loc: "Washington, DC", area: "virginia", stars: 4, review: "Solid Pacific Northwest chain outpost with a great light roast selection. Perfect pre-meeting stop near the Capitol Hill area.", tags: ["Light Roast", "Reliable", "Fast"], emoji: "🏙️" },
+    { name: "Summer Moon Coffee", loc: "Austin, TX", area: "austin", stars: 5, review: "Their wood-roasted coffee is unlike anything else. The Moon Milk is basically a hug in a cup. Multiple Austin locations — no excuses not to go.", tags: ["Wood-roasted", "Moon Milk", "Austin classic"], emoji: "🌕" },
+    { name: "[Your Favorite Café]", loc: "City, State", area: "other", stars: 4, review: "Replace this with a real café you love! Add the name, location, your review, and tags.", tags: ["Placeholder"], emoji: "☕" }
+  ];
+
+  let sugStars = 0, currentFilter = 'all';
+
+  function starHTML(n) {
+    let s = '';
+    for (let i = 1; i <= 5; i++) s += i <= n ? '<span>★</span>' : '<span class="star-empty">★</span>';
+    return s;
+  }
+
+  function renderCafes(filter) {
+    const grid = document.getElementById('cafe-grid');
+    const list = filter === 'all' ? cafes : cafes.filter(c => c.area === filter);
+    grid.innerHTML = list.map(c => `
+      <div class="cafe-card">
+        <div class="cafe-img">${c.emoji}</div>
+        <div class="cafe-body">
+          <div class="cafe-name">${c.name}</div>
+          <div class="cafe-loc">📍 ${c.loc}</div>
+          <div class="stars">${starHTML(c.stars)}</div>
+          <div class="cafe-review">"${c.review}"</div>
+          <div class="cafe-tags">${c.tags.map(t => `<span class="cafe-tag">${t}</span>`).join('')}</div>
+        </div>
+      </div>`).join('');
+  }
+
+  function filterCafe(area, btn) {
+    currentFilter = area;
+    document.querySelectorAll('.cafe-tab').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    renderCafes(area);
+  }
+
+  function setSugStar(v) {
+    sugStars = v;
+    document.querySelectorAll('#sug-stars .star-btn').forEach(b => {
+      b.classList.toggle('lit', parseInt(b.dataset.v) <= v);
+    });
+  }
+
+  function submitSuggest() {
+    const name = document.getElementById('sug-name').value.trim();
+    if (!name) { alert('Please enter a café name!'); return; }
+    const loc = document.getElementById('sug-loc').value.trim() || 'Unknown';
+    const note = document.getElementById('sug-note').value.trim() || 'A suggestion from a visitor.';
+    const user = document.getElementById('sug-user').value.trim();
+    cafes.push({ name, loc, area: 'other', stars: sugStars || 3, review: note + (user ? ` — ${user}` : ''), tags: ['Suggested'], emoji: '☕' });
+    renderCafes(currentFilter);
+    ['sug-name','sug-loc','sug-note','sug-user'].forEach(id => document.getElementById(id).value = '');
+    setSugStar(0);
+    const b = document.getElementById('sug-success');
+    b.style.display = 'block';
+    setTimeout(() => b.style.display = 'none', 4000);
+  }
+
+  function submitContact() {
+    const name = document.getElementById('c-name').value.trim();
+    const email = document.getElementById('c-email').value.trim();
+    const msg = document.getElementById('c-msg').value.trim();
+    if (!name || !email || !msg) { alert('Please fill in all fields.'); return; }
+    ['c-name','c-email','c-msg'].forEach(id => document.getElementById(id).value = '');
+    const b = document.getElementById('c-success');
+    b.style.display = 'block';
+    setTimeout(() => b.style.display = 'none', 5000);
+  }
+
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); } });
+  }, { threshold: 0.12 });
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+  const sectionIds = ['home','about','research','cv','cafes','contact'];
+  const navLinks = document.querySelectorAll('.nav-links a');
+  window.addEventListener('scroll', () => {
+    let current = 'home';
+    sectionIds.forEach(id => {
+      const el = document.getElementById(id);
+      if (el && window.scrollY >= el.offsetTop - 120) current = id;
+    });
+    navLinks.forEach(a => a.classList.toggle('active', a.getAttribute('href') === '#' + current));
+  });
+
+  renderCafes('all');
+</script>
+</body>
+</html>
