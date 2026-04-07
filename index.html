@@ -64,9 +64,7 @@
     }
 
     .sidebar-nav { list-style: none; display: flex; flex-direction: column; gap: 0; }
-
     .sidebar-nav li { display: flex; align-items: baseline; gap: 0.6rem; }
-
     .sidebar-nav .num { font-size: 0.65rem; color: var(--accent); min-width: 18px; }
 
     .sidebar-nav a {
@@ -80,11 +78,11 @@
     .sidebar-links { display: flex; flex-direction: column; gap: 0.5rem; margin-top: 2rem; }
 
     .sidebar-link {
-      font-size: 0.78rem; color: var(--text-soft);
+      font-size: 0.78rem; color: var(--text-soft) !important;
       text-decoration: none; letter-spacing: 0.04em; transition: color 0.2s;
     }
 
-    .sidebar-link:hover { color: var(--accent-soft); }
+    .sidebar-link:hover { color: var(--accent-soft) !important; }
 
     /* ── MAIN ── */
     .main { margin-left: var(--sidebar-w); padding: 5rem 5rem 5rem 4rem; max-width: 860px; }
@@ -276,8 +274,15 @@
     .contact-info p { font-size: 0.95rem; color: var(--text-soft); margin-bottom: 1.5rem; line-height: 1.9; }
 
     .contact-links { display: flex; flex-direction: column; }
-    .contact-link { display: flex; align-items: center; gap: 0.8rem; text-decoration: none; color: var(--text-soft); font-size: 0.9rem; transition: color 0.2s; padding: 0.7rem 0; border-bottom: 1px solid var(--border); }
-    .contact-link:hover { color: var(--accent-soft); }
+
+    .contact-link {
+      display: flex; align-items: center; gap: 0.8rem;
+      text-decoration: none; color: var(--text-soft) !important;
+      font-size: 0.9rem; transition: color 0.2s;
+      padding: 0.7rem 0; border-bottom: 1px solid var(--border);
+    }
+
+    .contact-link:hover { color: var(--accent-soft) !important; }
     .contact-link-icon { font-size: 1rem; width: 20px; text-align: center; flex-shrink: 0; }
 
     .contact-form { background: var(--bg3); border: 1px solid var(--border); border-radius: 6px; padding: 1.8rem; }
@@ -310,7 +315,6 @@
 </head>
 <body>
 
-<!-- SIDEBAR -->
 <aside class="sidebar">
   <div>
     <img class="sidebar-photo" src="photo/Minji Headshot.png" alt="Minji Kim" />
@@ -329,17 +333,16 @@
   </div>
   <div>
     <div class="sidebar-links">
-      <a href="mailto:minjik416@gmail.com">minjik416@gmail.com</a>
+      <a href="mailto:minjik416@gmail.com" class="sidebar-link">minjik416@gmail.com</a>
+      <a href="https://www.linkedin.com/in/minjikimut" target="_blank" class="sidebar-link">LinkedIn ↗</a>
       <a href="https://github.com/mk43275" target="_blank" class="sidebar-link">GitHub ↗</a>
       <a href="photo/Minji Kim CV.pdf" target="_blank" class="sidebar-link">CV (PDF) ↗</a>
     </div>
   </div>
 </aside>
 
-<!-- MAIN -->
 <main class="main">
 
-  <!-- HOME -->
   <div id="home" class="content-section">
     <p class="section-label">Portfolio</p>
     <h1>Minji<br><em>Kim</em></h1>
@@ -361,7 +364,6 @@
     </div>
   </div>
 
-  <!-- ABOUT -->
   <div id="about" class="content-section reveal">
     <p class="section-label">About</p>
     <h2>About Me</h2>
@@ -394,7 +396,6 @@
     </div>
   </div>
 
-  <!-- RESEARCH -->
   <div id="research" class="content-section reveal">
     <p class="section-label">Research &amp; Work</p>
     <h2>Projects &amp; Publications</h2>
@@ -448,7 +449,6 @@
     </div>
   </div>
 
-  <!-- CV -->
   <div id="cv" class="content-section reveal">
     <p class="section-label">Curriculum Vitae</p>
     <h2>Experience &amp; Education</h2>
@@ -568,7 +568,6 @@
     </div>
   </div>
 
-  <!-- COURSES -->
   <div id="courses" class="content-section reveal">
     <p class="section-label">Coursework</p>
     <h2>Courses</h2>
@@ -634,7 +633,6 @@
     </div>
   </div>
 
-  <!-- CAFÉS -->
   <div id="cafes" class="content-section reveal">
     <p class="section-label">Foodie Diary</p>
     <h2>My Favorite Spots</h2>
@@ -687,7 +685,6 @@
     </div>
   </div>
 
-  <!-- CONTACT -->
   <div id="contact" class="content-section reveal">
     <p class="section-label">Contact</p>
     <h2>Let's Connect</h2>
@@ -695,8 +692,8 @@
       <div class="contact-info">
         <p>Whether you're interested in collaborating on research, talking data and AI, or just want to swap café recommendations — I'd love to hear from you!</p>
         <div class="contact-links">
-          <a href="/cdn-cgi/l/email-protection#4a2723242023217e7b7c0a2d272b232664292527" class="contact-link">
-            <span class="contact-link-icon">📧</span><span><span class="__cf_email__" data-cfemail="503d393e3a393b64616610373d31393c7e333f3d">[email&#160;protected]</span></span>
+          <a href="mailto:minjik416@gmail.com" class="contact-link">
+            <span class="contact-link-icon">📧</span><span>minjik416@gmail.com</span>
           </a>
           <a href="https://www.linkedin.com/in/minjikimut" target="_blank" class="contact-link">
             <span class="contact-link-icon">💼</span><span>LinkedIn ↗</span>
@@ -736,7 +733,6 @@
   © 2025 Minji Kim · Austin, TX &amp; Richmond, VA
 </footer>
 
-<!-- LIGHTBOX -->
 <div id="lightbox" onclick="closeLightbox()">
   <img id="lb-img" src="" style="max-width:90vw;max-height:80vh;border-radius:6px;object-fit:contain;" onclick="event.stopPropagation()" />
   <div style="display:flex;align-items:center;gap:1.5rem;" onclick="event.stopPropagation()">
@@ -747,7 +743,7 @@
   <button onclick="closeLightbox()" style="position:absolute;top:1.5rem;right:1.5rem;background:none;border:none;color:rgba(255,255,255,0.5);font-size:1.5rem;cursor:pointer;">✕</button>
 </div>
 
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+<script>
   const cafes = [
     { name: "Instill Coffee", loc: "Cedar Park, TX", area: "austin", stars: 5, review: "Amazing matcha lattes here and kind workers! Avo toast is great as well!", tags: ["Matcha", "Study-friendly", "Cute"], images: ["photo/cafes/Instill 1.jpg", "photo/cafes/Instill 2.jpg"] },
     { name: "CaPhe.in Coffee", loc: "Austin, TX", area: "austin", stars: 4, review: "Great unique lattes & matchas, but it is so expensive! Worth a try though!", tags: ["Matcha", "Ube", "UT Austin"], images: [] },
@@ -755,8 +751,7 @@
     { name: "Soricha Tea & Theater", loc: "Annandale, VA", area: "virginia", stars: 5, review: "Lovely cafe! Korean-style lattes, tea, and desserts. So yummy!", tags: ["Korean", "Injeolmi Latte", "Study-friendly"], images: ["photo/cafes/Soricha 1.jpg", "photo/cafes/Soricha 2.jpg", "photo/cafes/Soricha 3.jpg"] }
   ];
 
-let sugStars = 0, currentFilter = 'all';
-
+  let sugStars = 0, currentFilter = 'all';
   let lightboxImgs = [], lightboxIdx = 0;
 
   function openLightbox(imgs, idx) {
@@ -787,9 +782,9 @@ let sugStars = 0, currentFilter = 'all';
       const hasImgs = c.images && c.images.length > 0;
       const imgHTML = hasImgs
         ? `<img src="${c.images[0]}" style="width:100%;height:100%;object-fit:cover;cursor:pointer;" onclick="openLightbox(cafes.find(x=>x.name==='${c.name.replace(/'/g,"\\'")}').images, 0)" />`
-        : `<span style="font-size:3rem;">☕</span>`;
+        : `<span style="font-size:2.5rem;">☕</span>`;
       const dotsHTML = hasImgs && c.images.length > 1
-        ? `<div style="display:flex;gap:4px;justify-content:center;margin-top:0.6rem;">${c.images.map((_, i) => `<span onclick="openLightbox(cafes.find(x=>x.name==='${c.name.replace(/'/g,"\\'")}').images,${i})" style="width:7px;height:7px;border-radius:50%;background:var(--clay);cursor:pointer;opacity:${i===0?1:0.4};"></span>`).join('')}</div>`
+        ? `<div style="display:flex;gap:4px;justify-content:center;margin-top:0.6rem;">${c.images.map((_, i) => `<span onclick="openLightbox(cafes.find(x=>x.name==='${c.name.replace(/'/g,"\\'")}').images,${i})" style="width:6px;height:6px;border-radius:50%;background:var(--accent-soft);cursor:pointer;opacity:${i===0?1:0.3};display:inline-block;"></span>`).join('')}</div>`
         : '';
       return `
         <div class="cafe-card">
@@ -848,32 +843,29 @@ let sugStars = 0, currentFilter = 'all';
 
   const observer = new IntersectionObserver(entries => {
     entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); } });
-  }, { threshold: 0.12 });
+  }, { threshold: 0.08 });
   document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 
-  const sectionIds = ['home','about','research','cv','cafes','contact'];
-  const navLinks = document.querySelectorAll('.nav-links a');
+  const sectionIds = ['home','about','research','cv','courses','cafes','contact'];
+  const navLinks = document.querySelectorAll('.sidebar-nav a');
   window.addEventListener('scroll', () => {
-    let current = 'home';
+    let current = "";
     sectionIds.forEach(id => {
-      const el = document.getElementById(id);
-      if (el && window.scrollY >= el.offsetTop - 120) current = id;
+      const section = document.getElementById(id);
+      if (section && window.pageYOffset >= section.offsetTop - 100) {
+        current = id;
+      }
     });
-    navLinks.forEach(a => a.classList.toggle('active', a.getAttribute('href') === '#' + current));
+    navLinks.forEach(link => {
+      link.classList.remove('active');
+      if (link.getAttribute('href').includes(current)) {
+        link.classList.add('active');
+      }
+    });
   });
 
   renderCafes('all');
 </script>
-
-<div id="lightbox" onclick="closeLightbox()" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:999;align-items:center;justify-content:center;flex-direction:column;gap:1rem;">
-  <img id="lb-img" src="" style="max-width:90vw;max-height:80vh;border-radius:12px;object-fit:contain;" onclick="event.stopPropagation()" />
-  <div style="display:flex;align-items:center;gap:1.5rem;" onclick="event.stopPropagation()">
-    <button onclick="moveLightbox(-1)" style="background:rgba(255,255,255,0.15);border:none;color:#fff;font-size:1.5rem;padding:0.5rem 1rem;border-radius:8px;cursor:pointer;">‹</button>
-    <span id="lb-counter" style="color:#fff;font-family:'Calibri',sans-serif;font-size:0.9rem;"></span>
-    <button onclick="moveLightbox(1)" style="background:rgba(255,255,255,0.15);border:none;color:#fff;font-size:1.5rem;padding:0.5rem 1rem;border-radius:8px;cursor:pointer;">›</button>
-  </div>
-  <button onclick="closeLightbox()" style="position:absolute;top:1.5rem;right:1.5rem;background:none;border:none;color:#fff;font-size:1.8rem;cursor:pointer;">✕</button>
-</div>
 
 </body>
 </html>
