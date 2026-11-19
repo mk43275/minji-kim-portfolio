@@ -58,7 +58,7 @@ PROJECTS = [
      "problem": "Most products sell nothing on most days. A forecast can score well and still leave shelves empty.",
      "did": ["Prepped 5 years of sales for Walmart's 4 California stores", "Built the baselines every model is scored against", "Researched the M5 winning methods and assembled the team blog"],
      "why": "Low error isn't enough. Inventory needs forecasts that add up to real demand.",
-     "links": [("Code on GitHub", "https://github.com/vollemax-lgtm/walmart-demand-forecasting")]},
+     "links": [("Read the blog", "/writing/walmart-forecasting/"), ("Code on GitHub", "https://github.com/vollemax-lgtm/walmart-demand-forecasting")]},
     {"slug": "research-dashboard", "title": "Researcher Commercialization Dashboard", "year": "2026", "tags": ["Data", "AI"],
      "desc": "Finds Virginia researchers with startup potential.",
      "stats": [("200K+", "publications"), ("AWS", "vector search"), ("VA", "statewide")],
@@ -87,7 +87,9 @@ PROJECT_FILTERS = ["Governance", "Security", "ML", "Data", "Publication"]
 WRITING_KINDS = ["Published Technical Paper", "Blog", "Research/Policy Paper"]
 WRITING = [
     {"title": "Predicting Weekly Walmart Sales", "kind": "Blog", "date": "", "note": "DL/ML team project", "wip": True,
-     "href": "/projects/walmart-forecasting/"},
+     # Full post hosted on this site: body lives in posts/<slug>.html
+     "slug": "walmart-forecasting", "post_title": "Can Pretrained AI Forecast Walmart Demand?", "post_date": "Nov 19, 2026",
+     "byline": "Group 8 · MIS 382N Advanced Deep Learning and ML, UT Austin", "project": "walmart-forecasting"},
     {"title": "Governing Cross-Border Federated AI for Anti-Money Laundering", "kind": "Research/Policy Paper", "date": "", "note": "Brumley Fellowship", "wip": True},
     {"title": "ReVision: A Dataset and Baseline VLM for Privacy-Preserving Task-Oriented Visual Instruction Rewriting",
      "kind": "Published Technical Paper", "date": "2025", "note": "IJCNLP–AACL 2025", "url": "https://arxiv.org/abs/2502.14780"},
@@ -206,7 +208,7 @@ def writing_list(ws):
         sub = f'<br><span class="sub">{br(w["sub"])}</span>' if w.get("sub") else ""
         inner = (f'<span class="dt">{date}</span><span><span class="it">{e(w["title"])}{arrow}</span>{sub}<br>'
                  f'<span class="tag">{e(w["kind"])}</span></span><span class="rt">{e(w["note"])}</span>')
-        link = w.get("url") or w.get("href")
+        link = w.get("url") or w.get("href") or (f'/writing/{w["slug"]}/' if w.get("slug") else None)
         if link:
             out.append(f'<a class="item" href="{link}" data-kind="{e(w["kind"])}">{inner}</a>')
         else:
@@ -250,7 +252,7 @@ def build():
     for p in PROJECTS:
         stats = "".join(f'<div class="stat"><b>{e(b)}</b><span>{e(l)}</span></div>' for b, l in p["stats"])
         did = "".join(f"<li>{e(x)}</li>" for x in p["did"])
-        links = "".join(f'<a class="btn{" p" if i == 0 else ""}" href="{u}">{e(l)} ↗</a>' for i, (l, u) in enumerate(p["links"]))
+        links = "".join(f'<a class="btn{" p" if i == 0 else ""}" href="{u}">{e(l)}{"" if u.startswith("/") else " ↗"}</a>' for i, (l, u) in enumerate(p["links"]))
         pages[f"projects/{p['slug']}/index.html"] = page(p["title"], "projects", f"""
 <a class="back" href="/projects/">← All projects</a>
 <p class="eyebrow">{e(" · ".join(p["tags"]))} · {e(p["year"])}</p><h1>{e(p["title"])}</h1><p class="lede">{br(p["desc"])}</p>
@@ -268,6 +270,20 @@ def build():
 {filters(WRITING_KINDS)}
 {writing_list(WRITING)}
 {filter_script("kind")}""", "Papers and posts by Minji Kim.")
+
+    for w in WRITING:
+        if not w.get("slug"):
+            continue
+        body = (ROOT / "posts" / f'{w["slug"]}.html').read_text(encoding="utf-8")
+        badge = ' <span class="wip">In the works</span>' if w.get("wip") else ""
+        proj = f' · <a href="/projects/{w["project"]}/">Project page</a>' if w.get("project") else ""
+        pages[f'writing/{w["slug"]}/index.html'] = page(w["post_title"], "writing", f"""
+<a class="back" href="/writing/">← Writing</a>
+<p class="eyebrow">{e(w["kind"])}{badge}</p><h1>{e(w["post_title"])}</h1>
+<p class="byline">{e(w["post_date"])} · {e(w["byline"])}{proj}</p>
+<article class="post-body">
+{body}
+</article>""", w["post_title"])
 
     courses = "".join(f'<div class="box"><div class="v">{e(c)}</div></div>' for c in COURSES)
     certs = "".join(f'<div class="box"><div class="k">Certification</div><div class="v">{e(n)}</div><div class="s">{e(i)}</div></div>' for n, i in CERTS)

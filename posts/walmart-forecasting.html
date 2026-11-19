@@ -1,0 +1,94 @@
+<p class="post-lede">Pretrained AI models, used straight out of the box, forecast Walmart product demand about 13% better than a simple 4-week average. The catch: they forecast too little, and for a store deciding how much to stock, that matters more than the error score.</p>
+
+<h2>Why we asked</h2>
+<p>In 2020, Kaggle's M5 competition asked teams to forecast daily Walmart sales 28 days ahead. The winners used LightGBM, a tree-based model, fed with carefully built features: past sales, rolling averages, prices, holidays.</p>
+<p>Since then, "foundation models" for time series have arrived. Amazon's Chronos-2 and Google's TimesFM-3 are trained once on huge collections of time series, then forecast new data with no training at all. We wanted to know three things:</p>
+<ol>
+  <li>Can these zero-shot models match models trained on Walmart's own data?</li>
+  <li>Can post-processing (calibration and ensembles) fix what they get wrong?</li>
+  <li>What is the difference worth in safety-stock dollars?</li>
+</ol>
+
+<h2>The data: most products sell nothing on most days</h2>
+<p>We used the <a href="https://www.kaggle.com/competitions/m5-forecasting-accuracy">M5 dataset</a> for Walmart's four California stores: 12,196 product-store series of daily unit sales from January 2011 to May 2016, plus weekly prices, holidays, events and SNAP (food assistance) days. We removed the days before each product first went on sale, since those zeros aren't real demand. That dropped 22% of rows.</p>
+<p>The defining feature of this data is that the median product sells nothing on 60% of days. To see how models handle that, we split products into thirds by how fast they sold before our test periods:</p>
+<div class="table"><table>
+  <tr><th>Sales speed</th><th>Avg units per day</th><th>Days with zero sales</th></tr>
+  <tr><td>Slow</td><td>0.23</td><td>82%</td></tr>
+  <tr><td>Medium</td><td>0.69</td><td>60%</td></tr>
+  <tr><td>Fast</td><td>2.09</td><td>32%</td></tr>
+</table></div>
+<p>A slow seller sells about one unit every four days. Any model has to handle long runs of zeros broken by the occasional sale.</p>
+
+<h2>How we set it up</h2>
+<figure><img src="/photo/blog/walmart-pipeline.png" alt="Study pipeline: data prep, 5 model families, post-processing, scoring; and the seven 28-day forecast windows (4 backtests, 2 validation, 1 test)"><figcaption>Study pipeline and the 7 forecast windows</figcaption></figure>
+<p>Every model forecasts 28 days ahead, the same horizon as M5, and only sees sales from before each window starts. Post-processing learns from the earlier windows, and the test window (Apr 25 to May 22, 2016) is used only for final scores. We measure average error per product per day (MAE), a version weighted by dollar sales, and bias (whether forecasts run high or low), then turn forecasts into safety-stock dollars.</p>
+
+<h2>The models: from copy-last-week to pretrained transformers</h2>
+<p>We tested five model families, from the simplest possible forecast to models pretrained by Amazon and Google.</p>
+<div class="table"><table>
+  <tr><th>Model</th><th>How it works</th><th>Trained on our data?</th><th>Status</th></tr>
+  <tr><td>Seasonal naive</td><td>"Last week" repeats the same weekday last week; "4-week average" averages each weekday over the past 4 weeks</td><td>No training</td><td>Done</td></tr>
+  <tr><td>LightGBM</td><td>Gradient-boosted trees with sales, price and holiday features, the M5 winners' approach</td><td>Yes</td><td>In progress</td></tr>
+  <tr><td>DeepAR</td><td>LSTM neural network reading 84 days of sales history</td><td>Yes</td><td>Done</td></tr>
+  <tr><td>Chronos-2 (Amazon)</td><td>Pretrained transformer, used zero-shot</td><td>No</td><td>Done</td></tr>
+  <tr><td>TimesFM-3 (Google)</td><td>Pretrained transformer, used zero-shot</td><td>No</td><td>Done</td></tr>
+</table></div>
+<p>We also ran both foundation models with prices and holidays as extra inputs. They gained only about 0.2%, and a review on Nov 19 found that one price feature peeked slightly at future prices, so we report the clean zero-shot runs. Two more versions of Chronos-2 are written but not yet run: few-shot (learning from 100 related products at once) and fine-tuned on our data.</p>
+
+<h2>Results: zero-shot AI wins, with no training</h2>
+<p>TimesFM-3 had the lowest error of any single model on the test window (Apr 25 to May 22, 2016), 13% better than the 4-week average, without ever seeing Walmart data in training.</p>
+<div class="table"><table>
+  <tr><th>Model</th><th>Error per product-day (MAE, units)</th><th>Sales-weighted MAE</th><th>vs 4-week average</th><th>Bias (units/day)</th></tr>
+  <tr><td>TimesFM-3</td><td>1.016</td><td>2.104</td><td>+13%</td><td>−0.41</td></tr>
+  <tr><td>Chronos-2</td><td>1.026</td><td>2.157</td><td>+12%</td><td>−0.47</td></tr>
+  <tr><td>DeepAR</td><td>1.084</td><td>2.368</td><td>+8%</td><td>−0.59</td></tr>
+  <tr><td>4-week average</td><td>1.172</td><td>2.419</td><td>0%</td><td>−0.05</td></tr>
+  <tr><td>Last week</td><td>1.335</td><td>2.725</td><td>−14%</td><td>−0.07</td></tr>
+</table></div>
+<p class="note">Scored on the same 12,190 products for every model. LightGBM will join the table after the final run.</p>
+<p>Broken down by sales speed, the picture gets more interesting:</p>
+<div class="table"><table>
+  <tr><th>Improvement over 4-week average</th><th>Fast sellers</th><th>Medium sellers</th><th>Slow sellers</th></tr>
+  <tr><td>TimesFM-3</td><td>+11.5%</td><td>+11.9%</td><td>+25.1%</td></tr>
+  <tr><td>Chronos-2</td><td>+10.4%</td><td>+11.0%</td><td>+25.2%</td></tr>
+  <tr><td>DeepAR</td><td>+3.6%</td><td>+9.4%</td><td>+23.4%</td></tr>
+</table></div>
+<p>The biggest gains look like they come on slow sellers, but that's partly an illusion. The models' point forecast is the median, and when a product sells nothing on 82% of days, the median is zero. Forecasting zero scores well on MAE, yet it misses every day the product does sell. Fast sellers are where the money is: their errors are about six times larger, and that's where DeepAR falls furthest behind.</p>
+
+<h2>Post-processing: fixing totals costs some daily accuracy</h2>
+<p>We tried three fixes on top of the raw forecasts. Each learns only from windows before the one it's applied to, so nothing is tuned on the test period.</p>
+<div class="table"><table>
+  <tr><th>Fix</th><th>What it does</th><th>Test MAE</th><th>Result</th></tr>
+  <tr><td>Ensemble</td><td>Weighted average of the models; weights chosen on earlier windows</td><td>1.014</td><td>Picked 0.8 TimesFM-3 / 0.2 Chronos-2 and gave DeepAR zero weight. Barely better than TimesFM-3 alone: the models make similar mistakes</td></tr>
+  <tr><td><code>calmae</code></td><td>Per product group, picks the forecast percentile and zero cutoff with the lowest error</td><td>1.013</td><td>Almost no change: the median was already the best choice</td></tr>
+  <tr><td><code>calbias</code></td><td>Per product group, scales forecasts so total units match actual sales</td><td>1.094</td><td>Total units forecast rose from 72% to 95% of actual sales, at about 8% more daily error</td></tr>
+</table></div>
+<p><code>calbias</code> is the interesting one. It trades a little day-to-day accuracy for forecasts that add up to the right volume, which is what an inventory planner actually needs. Its first version couldn't lift slow sellers off zero, because it scaled the median and zero times anything is still zero. It now scales the model's average forecast instead.</p>
+<p>These numbers come from our Nov 18 run, which built on the covariate versions. The final run rebuilds everything on the zero-shot models with the updated <code>calbias</code>.</p>
+
+<h2>What it means for inventory: low error isn't enough</h2>
+<p>Every AI model forecast too little. TimesFM-3's forecasts ran about 0.4 units per product per day low, while the simple 4-week average was almost unbiased. A store that orders from a forecast that runs low ends up with empty shelves.</p>
+<p>We saw this directly when we turned forecasts into safety stock, the extra buffer a store keeps to cover surprise demand. In our first attempt, the AI models' buffers looked about $27,000 cheaper than the baseline's. But they covered only 65 to 71% of weeks, against 88% for the baseline and a 95% target. The cheaper buffer was cheaper because it failed more often.</p>
+<p>So we changed the method: each model's buffer is now sized so it covers 95% of weeks on our validation periods, and only then do we compare dollars. We also added a score for how well each model's 10th to 90th percentile range brackets real sales, since that range is what sizes a buffer. Final dollar figures come from the last run.</p>
+
+<h2>What we learned, and what's next</h2>
+<ul>
+  <li><strong>Zero-shot works.</strong> With no training on Walmart data, TimesFM-3 and Chronos-2 beat every simple baseline by 12 to 13% and beat DeepAR, a model we trained ourselves.</li>
+  <li><strong>The metric picks the winner.</strong> Average absolute error rewards forecasting zero for slow sellers. M5 scored entries with a squared-error metric (WRMSSE), which rewards forecasting the average instead, and the winning LightGBM entries were built for that.</li>
+  <li><strong>Inventory needs unbiased forecasts.</strong> The models with the lowest error forecast the least volume. Fixing totals costs a little daily accuracy but is what keeps shelves stocked.</li>
+</ul>
+<p><strong>Limitations:</strong> California only (4 of M5's 10 stores), one test window, and product-level scores rather than M5's official 12-level WRMSSE, so our numbers can't be compared to the Kaggle leaderboard.</p>
+<p><strong>Before our results freeze on Sun Nov 22:</strong></p>
+<ol>
+  <li>Add LightGBM, the M5 winners' approach.</li>
+  <li>Run few-shot and fine-tuned Chronos-2, or leave them as future work.</li>
+  <li>Rebuild post-processing on the zero-shot runs and compare safety stock at equal 95% coverage.</li>
+  <li>Test our own post-processing idea: send fast sellers to TimesFM-3 and slow sellers to a model that forecasts real volume.</li>
+</ol>
+
+<h2>Team, code and tools</h2>
+<p>Group 8, MIS 382N Advanced Deep Learning and ML, UT Austin: Minji Kim (data prep, baselines, M5 research), Elena Reyes (LightGBM), James Rainey (DeepAR), Prateek Bolandanda (TimesFM-3 full run), Max Volle (foundation models, scoring, post-processing).</p>
+<p>Code: <a href="https://github.com/vollemax-lgtm/walmart-demand-forecasting">github.com/vollemax-lgtm/walmart-demand-forecasting</a>. Pretrained models: <a href="https://huggingface.co/amazon/chronos-2">Chronos-2</a> and <a href="https://huggingface.co/google/timesfm-3.0-pytorch">TimesFM-3</a>, used as released. Data: <a href="https://www.kaggle.com/competitions/m5-forecasting-accuracy">M5 Forecasting, Kaggle</a>.</p>
+<p><strong>LLM use:</strong> Code in our repository was written primarily with Claude (Anthropic) from specifications our team designed. Our contributions were the problem framing, the choice of models and experiments, the validation design, the business assumptions, debugging decisions, and all interpretation of results. A full log is in the repository's <code>REUSE_LOG.md</code>.</p>
+<p><strong>Sources:</strong> <a href="https://www.kaggle.com/competitions/m5-forecasting-accuracy">M5 Forecasting competition</a> · <a href="https://econpapers.repec.org/RePEc:eee:intfor:v:38:y:2022:i:4:p:1386-1399">In &amp; Jung (2022), the 1st-place M5 method</a> · <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC9232271">M5 competition review</a></p>
