@@ -53,12 +53,11 @@ PROJECTS = [
      "links": [("Read on arXiv", "https://arxiv.org/abs/2502.14780")]},
     {"slug": "walmart-forecasting", "title": "Predicting Weekly Walmart Sales", "year": "2026", "tags": ["ML", "Data"],
      "status": "In the works",
-     "desc": "Can off-the-shelf AI forecasting models predict Walmart demand as well as the methods that won the M5 competition? Team project for Advanced Deep Learning + ML at UT McCombs.",
-     "stats": [("12K+", "California product-store series"), ("5", "model types compared"), ("13%", "less error than the baseline (early result)")],
-     "problem": "Most Walmart products sell nothing on most days. That makes demand hard to forecast and safety stock easy to get wrong.",
-     "did": ["Cleaned 5 years of sales data for 12K+ products", "Built the baseline every model is scored against", "Writing the M5 top-solutions summary and assembling the final blog"],
-     "why": "Better forecasts mean less money tied up in safety stock.",
-     "update": "All models except LightGBM have run on the full data. Google's TimesFM-3 leads so far, with Amazon's Chronos-2 close behind. Results freeze Nov 22 and the full write-up lands in December.",
+     "desc": "Can pretrained AI forecast Walmart demand without ever training on it? Team project for Advanced Deep Learning + ML at UT McCombs.",
+     "stats": [("12,196", "product-store series"), ("13%", "less error than a 4-week average, zero-shot"), ("60%", "of days the median product sells nothing")],
+     "problem": "Most products sell nothing on most days. A forecast can score well and still leave shelves empty.",
+     "did": ["Prepped 5 years of sales for Walmart's 4 California stores", "Built the baselines every model is scored against", "Researched the M5 winning methods and assembled the team blog"],
+     "why": "Low error isn't enough. Inventory needs forecasts that add up to real demand.",
      "links": [("Code on GitHub", "https://github.com/vollemax-lgtm/walmart-demand-forecasting")]},
     {"slug": "research-dashboard", "title": "Researcher Commercialization Dashboard", "year": "2026", "tags": ["Data", "AI"],
      "desc": "Finds Virginia researchers with startup potential.",
@@ -88,7 +87,7 @@ PROJECT_FILTERS = ["Governance", "Security", "ML", "Data", "Publication"]
 WRITING_KINDS = ["Published Technical Paper", "Blog", "Research/Policy Paper"]
 WRITING = [
     {"title": "Predicting Weekly Walmart Sales", "kind": "Blog", "date": "", "note": "DL/ML team project", "wip": True,
-     "href": "/projects/walmart-forecasting/", "sub": "Models done, results freezing. Full write-up coming December 2026."},
+     "href": "/projects/walmart-forecasting/"},
     {"title": "Governing Cross-Border Federated AI for Anti-Money Laundering", "kind": "Research/Policy Paper", "date": "", "note": "Brumley Fellowship", "wip": True},
     {"title": "ReVision: A Dataset and Baseline VLM for Privacy-Preserving Task-Oriented Visual Instruction Rewriting",
      "kind": "Published Technical Paper", "date": "2025", "note": "IJCNLP–AACL 2025", "url": "https://arxiv.org/abs/2502.14780"},
@@ -255,7 +254,7 @@ def build():
         pages[f"projects/{p['slug']}/index.html"] = page(p["title"], "projects", f"""
 <a class="back" href="/projects/">← All projects</a>
 <p class="eyebrow">{e(" · ".join(p["tags"]))} · {e(p["year"])}</p><h1>{e(p["title"])}</h1><p class="lede">{br(p["desc"])}</p>
-{f'<div class="update"><span class="wip">{e(p["status"])}</span><p>{br(p["update"])}</p></div>' if p.get("update") else ""}
+{f'<p style="margin-top:1rem">{status_badge(p)}</p>' if p.get("status") else ""}
 <div class="stats">{stats}</div>
 <div class="three">
   <div><h3>Problem</h3><p>{br(p["problem"])}</p></div>
