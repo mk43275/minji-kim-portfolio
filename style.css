@@ -114,3 +114,29 @@ footer a:hover { color: var(--accent); }
   .row { grid-template-columns: 36px 1fr; }
   .item { grid-template-columns: 1fr; gap: .2rem; }
 }
+
+/* Status update box on in-progress projects */
+.update { margin-top: 1.5rem; background: var(--card); border: 1px solid var(--line); border-left: 3px solid var(--accent); padding: 1rem 1.2rem; max-width: 640px; }
+.update p { margin-top: .5rem; font-size: .95rem; }
+.row .t .wip { vertical-align: 3px; margin-left: .4rem; }
+
+/* Blog posts */
+.byline { color: var(--soft); font-size: .92rem; margin-top: .8rem; }
+.byline a { color: var(--accent); }
+.eyebrow .wip { margin-left: .5rem; letter-spacing: 0; text-transform: none; font-weight: 400; vertical-align: 1px; }
+.post-body { max-width: 720px; margin-top: 2.5rem; font-size: 1.08rem; line-height: 1.75; }
+.post-body p, .post-body ul, .post-body ol { margin-bottom: 1.1rem; }
+.post-body .post-lede { font-size: 1.25rem; line-height: 1.6; border-left: 3px solid var(--accent); padding-left: 1.1rem; margin-bottom: 2.2rem; }
+.post-body h2 { font-size: 1.5rem; line-height: 1.25; margin: 2.8rem 0 .9rem; }
+.post-body ul, .post-body ol { padding-left: 1.4rem; }
+.post-body li { margin-bottom: .4rem; }
+.post-body a { color: var(--accent); text-decoration: underline; text-underline-offset: 3px; }
+.post-body code { font-family: Consolas, 'Courier New', monospace; font-size: .9em; background: var(--card); border: 1px solid var(--line); padding: 0 .3rem; border-radius: 2px; }
+.post-body .note { font-size: .9rem; color: var(--soft); }
+.post-body .table { overflow-x: auto; margin: 1.2rem 0 1.4rem; }
+.post-body table { border-collapse: collapse; width: 100%; font-size: .95rem; }
+.post-body th { text-align: left; font-weight: 700; border-bottom: 2px solid var(--text); padding: .5rem .7rem; }
+.post-body td { border-bottom: 1px solid var(--line); padding: .5rem .7rem; vertical-align: top; }
+.post-body figure { margin: 1.5rem 0; background: #fff; border: 1px solid var(--line); padding: 1rem; }
+.post-body figure img { width: 100%; display: block; }
+.post-body figcaption { font-size: .85rem; color: var(--soft); margin-top: .6rem; text-align: center; }

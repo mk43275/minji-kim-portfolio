@@ -17,6 +17,7 @@ Plain HTML and CSS, deployed on Vercel with no build step.
 All text lives at the top of `build.py`.
 
 1. Edit the lists there (projects, writing, experience, cafés, and so on).
+   Full blog posts hosted on the site live in `posts/<slug>.html`; give the Writing entry the same `slug`.
 2. Run `python3 build.py` to regenerate every page.
 3. Commit the changed files and push.
 
