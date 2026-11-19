@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Writing · Minji Kim</title>
+<meta name="description" content="Papers and posts by Minji Kim.">
+<link rel="icon" type="image/png" href="/photo/teaicon.png">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Carlito:ital,wght@0,400;0,700;1,400&display=swap">
+<link rel="stylesheet" href="/style.css">
+</head>
+<body>
+<div class="wrap">
+<nav class="top">
+  <a class="me" href="/"><img src="/photo/Minji%20Headshot.png" alt="">Minji Kim</a>
+  <div class="links"><a href="/">Home</a><a href="/projects/">Projects</a><a href="/writing/" class="on">Writing</a><a href="/about/">About</a><a href="/cafes/">Cafés</a></div>
+</nav>
+<main>
+
+<p class="eyebrow">Writing</p><h1>Papers &amp; posts</h1><p class="lede">Published research, policy work, and project write-ups.</p>
+<div class="filters"><button class="on" data-f="All">All</button><button class="" data-f="Published Technical Paper">Published Technical Paper</button><button class="" data-f="Blog">Blog</button><button class="" data-f="Research/Policy Paper">Research/Policy Paper</button></div>
+<div class="list"><div class="item" data-kind="Blog"><span class="dt"><span class="wip">In the works</span></span><span><span class="it">Predicting Weekly Walmart Sales</span><br><span class="tag">Blog</span></span><span class="rt">DL/ML project</span></div><div class="item" data-kind="Research/Policy Paper"><span class="dt"><span class="wip">In the works</span></span><span><span class="it">Governing Cross-Border Federated AI for Anti-Money Laundering</span><br><span class="tag">Research/Policy Paper</span></span><span class="rt">Brumley Fellowship</span></div><a class="item" href="https://arxiv.org/abs/2502.14780" data-kind="Published Technical Paper"><span class="dt">2025</span><span><span class="it">ReVision: A Dataset and Baseline VLM for Privacy-Preserving Task-Oriented Visual Instruction Rewriting ↗</span><br><span class="tag">Published Technical Paper</span></span><span class="rt">IJCNLP–AACL 2025</span></a></div>
+<script>
+document.querySelectorAll('.filters').forEach(f => f.addEventListener('click', ev => {
+  const b = ev.target.closest('button'); if (!b) return;
+  f.querySelectorAll('button').forEach(x => x.classList.toggle('on', x === b));
+  const k = b.dataset.f;
+  document.querySelectorAll('[data-kind]').forEach(el => {
+    el.style.display = (k === 'All' || el.dataset.kind.split('|').includes(k) || el.dataset.kind.split(' ').includes(k)) ? '' : 'none';
+  });
+}));
+</script>
+</main>
+<footer>
+  <span>© 2026 Minji Kim</span>
+  <span><a href="mailto:minjik416@gmail.com">minjik416@gmail.com</a> · <a href="https://www.linkedin.com/in/minjikimut">LinkedIn</a> · <a href="https://github.com/mk43275">GitHub</a> · <a href="/photo/Minji%20Kim%20CV.pdf">CV</a></span>
+</footer>
+</div>
+</body>
+</html>
