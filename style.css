@@ -114,3 +114,8 @@ footer a:hover { color: var(--accent); }
   .row { grid-template-columns: 36px 1fr; }
   .item { grid-template-columns: 1fr; gap: .2rem; }
 }
+
+/* Status update box on in-progress projects */
+.update { margin-top: 1.5rem; background: var(--card); border: 1px solid var(--line); border-left: 3px solid var(--accent); padding: 1rem 1.2rem; max-width: 640px; }
+.update p { margin-top: .5rem; font-size: .95rem; }
+.row .t .wip { vertical-align: 3px; margin-left: .4rem; }

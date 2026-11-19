@@ -51,6 +51,15 @@ PROJECTS = [
      "did": ["Co-authored a new dataset and VLM baseline", "Rewrote instructions so private details stay private", "Funded by UT's Undergraduate Research Fellowship"],
      "why": "Helpful AI shouldn't require giving up your privacy.",
      "links": [("Read on arXiv", "https://arxiv.org/abs/2502.14780")]},
+    {"slug": "walmart-forecasting", "title": "Predicting Weekly Walmart Sales", "year": "2026", "tags": ["ML", "Data"],
+     "status": "In the works",
+     "desc": "Can off-the-shelf AI forecasting models predict Walmart demand as well as the methods that won the M5 competition? Team project for Advanced Deep Learning + ML at UT McCombs.",
+     "stats": [("12K+", "California product-store series"), ("5", "model types compared"), ("13%", "less error than the baseline (early result)")],
+     "problem": "Most Walmart products sell nothing on most days. That makes demand hard to forecast and safety stock easy to get wrong.",
+     "did": ["Cleaned 5 years of sales data for 12K+ products", "Built the baseline every model is scored against", "Writing the M5 top-solutions summary and assembling the final blog"],
+     "why": "Better forecasts mean less money tied up in safety stock.",
+     "update": "All models except LightGBM have run on the full data. Google's TimesFM-3 leads so far, with Amazon's Chronos-2 close behind. Results freeze Nov 22 and the full write-up lands in December.",
+     "links": [("Code on GitHub", "https://github.com/vollemax-lgtm/walmart-demand-forecasting")]},
     {"slug": "research-dashboard", "title": "Researcher Commercialization Dashboard", "year": "2026", "tags": ["Data", "AI"],
      "desc": "Finds Virginia researchers with startup potential.",
      "stats": [("200K+", "publications"), ("AWS", "vector search"), ("VA", "statewide")],
@@ -78,7 +87,8 @@ PROJECT_FILTERS = ["Governance", "Security", "ML", "Data", "Publication"]
 # Writing: kind must be one of WRITING_KINDS. wip=True shows "In the works" and isn't clickable.
 WRITING_KINDS = ["Published Technical Paper", "Blog", "Research/Policy Paper"]
 WRITING = [
-    {"title": "Predicting Weekly Walmart Sales", "kind": "Blog", "date": "", "note": "DL/ML project", "wip": True},
+    {"title": "Predicting Weekly Walmart Sales", "kind": "Blog", "date": "", "note": "DL/ML team project", "wip": True,
+     "href": "/projects/walmart-forecasting/", "sub": "Models done, results freezing. Full write-up coming December 2026."},
     {"title": "Governing Cross-Border Federated AI for Anti-Money Laundering", "kind": "Research/Policy Paper", "date": "", "note": "Brumley Fellowship", "wip": True},
     {"title": "ReVision: A Dataset and Baseline VLM for Privacy-Preserving Task-Oriented Visual Instruction Rewriting",
      "kind": "Published Technical Paper", "date": "2025", "note": "IJCNLP–AACL 2025", "url": "https://arxiv.org/abs/2502.14780"},
@@ -175,10 +185,13 @@ def page(title, active, body, desc=None):
 </html>
 """
 
+def status_badge(p):
+    return f' <span class="wip">{e(p["status"])}</span>' if p.get("status") else ""
+
 def project_rows(ps):
     return '<div class="rows">' + "".join(
         f'<a class="row" href="/projects/{p["slug"]}/" data-tags="{e(" ".join(p["tags"]))}"><span class="n">{i+1:02d}</span>'
-        f'<div><div class="t">{e(p["title"])}</div><div class="d">{br(p["desc"])}</div></div></a>'
+        f'<div><div class="t">{e(p["title"])}{status_badge(p)}</div><div class="d">{br(p["desc"])}</div></div></a>'
         for i, p in enumerate(ps)) + "</div>"
 
 def item_list(rows):
@@ -191,10 +204,12 @@ def writing_list(ws):
     for w in ws:
         date = '<span class="wip">In the works</span>' if w.get("wip") else e(w["date"])
         arrow = " ↗" if w.get("url") else ""
-        inner = (f'<span class="dt">{date}</span><span><span class="it">{e(w["title"])}{arrow}</span><br>'
+        sub = f'<br><span class="sub">{br(w["sub"])}</span>' if w.get("sub") else ""
+        inner = (f'<span class="dt">{date}</span><span><span class="it">{e(w["title"])}{arrow}</span>{sub}<br>'
                  f'<span class="tag">{e(w["kind"])}</span></span><span class="rt">{e(w["note"])}</span>')
-        if w.get("url"):
-            out.append(f'<a class="item" href="{w["url"]}" data-kind="{e(w["kind"])}">{inner}</a>')
+        link = w.get("url") or w.get("href")
+        if link:
+            out.append(f'<a class="item" href="{link}" data-kind="{e(w["kind"])}">{inner}</a>')
         else:
             out.append(f'<div class="item" data-kind="{e(w["kind"])}">{inner}</div>')
     return '<div class="list">' + "".join(out) + "</div>"
@@ -240,6 +255,7 @@ def build():
         pages[f"projects/{p['slug']}/index.html"] = page(p["title"], "projects", f"""
 <a class="back" href="/projects/">← All projects</a>
 <p class="eyebrow">{e(" · ".join(p["tags"]))} · {e(p["year"])}</p><h1>{e(p["title"])}</h1><p class="lede">{br(p["desc"])}</p>
+{f'<div class="update"><span class="wip">{e(p["status"])}</span><p>{br(p["update"])}</p></div>' if p.get("update") else ""}
 <div class="stats">{stats}</div>
 <div class="three">
   <div><h3>Problem</h3><p>{br(p["problem"])}</p></div>
