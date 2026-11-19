@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Projects · Minji Kim</title>
+<meta name="description" content="Projects by Minji Kim in AI governance, security, machine learning, and data.">
+<link rel="icon" type="image/png" href="/photo/teaicon.png">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Carlito:ital,wght@0,400;0,700;1,400&display=swap">
+<link rel="stylesheet" href="/style.css">
+</head>
+<body>
+<div class="wrap">
+<nav class="top">
+  <a class="me" href="/"><img src="/photo/Minji%20Headshot.png" alt="">Minji Kim</a>
+  <div class="links"><a href="/">Home</a><a href="/projects/" class="on">Projects</a><a href="/writing/">Writing</a><a href="/about/">About</a><a href="/cafes/">Cafés</a></div>
+</nav>
+<main>
+
+<p class="eyebrow">Projects</p><h1>Things I've built</h1>
+<div class="filters"><button class="on" data-f="All">All</button><button class="" data-f="Governance">Governance</button><button class="" data-f="Security">Security</button><button class="" data-f="ML">ML</button><button class="" data-f="Data">Data</button><button class="" data-f="Publication">Publication</button></div>
+<div class="rows"><a class="row" href="/projects/phish-in-the-web/" data-tags="Security ML"><span class="n">01</span><div><div class="t">Phish in the Web</div><div class="d">Explainable phishing detection for non-experts.</div></div></a><a class="row" href="/projects/federated-aml/" data-tags="Governance Research"><span class="n">02</span><div><div class="t">Federated AI for AML</div><div class="d">Governing cross-border AI that fights money laundering.</div></div></a><a class="row" href="/projects/revision/" data-tags="Publication ML"><span class="n">03</span><div><div class="t">ReVision</div><div class="d">Privacy-preserving visual instructions.<br>Published at IJCNLP–AACL 2025.</div></div></a><a class="row" href="/projects/research-dashboard/" data-tags="Data AI"><span class="n">04</span><div><div class="t">Researcher Commercialization Dashboard</div><div class="d">Finds Virginia researchers with startup potential.</div></div></a><a class="row" href="/projects/robo-caller/" data-tags="ML"><span class="n">05</span><div><div class="t">Less Annoying Robo Caller</div><div class="d">Hears frustration in a caller&#x27;s voice and words.</div></div></a><a class="row" href="/projects/safer-pittsburgh/" data-tags="Data"><span class="n">06</span><div><div class="t">Safer City for Pittsburgh</div><div class="d">Mapped property decay hotspots for the city.</div></div></a></div>
+<script>
+document.querySelectorAll('.filters').forEach(f => f.addEventListener('click', ev => {
+  const b = ev.target.closest('button'); if (!b) return;
+  f.querySelectorAll('button').forEach(x => x.classList.toggle('on', x === b));
+  const k = b.dataset.f;
+  document.querySelectorAll('[data-tags]').forEach(el => {
+    el.style.display = (k === 'All' || el.dataset.tags.split('|').includes(k) || el.dataset.tags.split(' ').includes(k)) ? '' : 'none';
+  });
+}));
+</script>
+</main>
+<footer>
+  <span>© 2026 Minji Kim</span>
+  <span><a href="mailto:minjik416@gmail.com">minjik416@gmail.com</a> · <a href="https://www.linkedin.com/in/minjikimut">LinkedIn</a> · <a href="https://github.com/mk43275">GitHub</a> · <a href="/photo/Minji%20Kim%20CV.pdf">CV</a></span>
+</footer>
+</div>
+</body>
+</html>
